@@ -14,11 +14,11 @@ const startGame = () => {
 
   /* -> Break the word down to letters and store in an array*/
   mysteryWordArray = mysteryWord.split("");
-  console.log("Mystery word array is " +mysteryWordArray);
+  //console.log("Mystery word array is " +mysteryWordArray);
 
   /* -> Create an array of underscores to hold the guesses*/
   lettersFound = Array.from('_' .repeat(mysteryWord.length));
-  console.log("Letters Found Array = " +lettersFound);
+  //console.log("Letters Found Array = " +lettersFound);
 
   displayWelcome();
   displayGallows(0);
@@ -34,8 +34,7 @@ const displayWelcome = () => {
 
 /**** This function recieves a number represented the number of wrong gueeses and constructs a gallows accordingly  ****/
 const displayGallows = (num) => {
- console.log("________\n|\t!\n|" + HANGMAN_ARRAY[num]); 
- console.log("Leaving the function");
+ console.log("________\n|\t!\n|" + HANGMAN_ARRAY[num]);  
 };
 
 /**** This function compares two arrays, element by element.    ****/
@@ -45,7 +44,7 @@ const compareArrays = (a, b) => { return a.length === b.length && a.every((eleme
 
 /* * -> Initialize variables  ( hangMan T/F, maxGuesses=6, numGuesses, mysteryWord array?, lettersFound array?, playAgain) */
 let hanged=false;                                      // true or false
-let solved;
+let solved=false;
 const WRONG_GUESSES = 6;
 const HANGMAN_ARRAY = [
   '\n| \n| \n| \n|________\n',                         //0  Empty Gallows
@@ -70,15 +69,15 @@ startGame(0);
 
 // While the man is not hung and the word is not solved and guesses != MaxGuesses
 while( !hanged && !solved && xLetters.length !== WRONG_GUESSES ){
-  console.log("value of xletters is: " +xLetters);
-  console.log("xletters.length="+xLetters.length);
+  //console.log("value of xletters is: " +xLetters);
+  //console.log("xletters.length="+xLetters.length);
 
   /* Prompt the user to select a letter & store the guess in a variable */ 
-  let letterGuessed = prompt.question("Please guess a letter:  ");
+  let letterGuessed = prompt.question("\n\nPlease guess a letter:  ");
   letterGuessed = letterGuessed.toLowerCase();
-  console.log("Letter Guessed is: " + letterGuessed);
+  //console.log("Letter Guessed is: " + letterGuessed);
   numGuesses++;
-  console.log("Number of Guesses is: " + numGuesses);
+  //console.log("Number of Guesses is: " + numGuesses);
 
   
   if( allLetters.includes(letterGuessed)) {                               // Check to see if the letter has been guessed.
@@ -86,40 +85,52 @@ while( !hanged && !solved && xLetters.length !== WRONG_GUESSES ){
     numGuesses--;       
   } else {
     allLetters.push(letterGuessed);
-    
+    //console.log("All letters guessed: " +allLetters);    
+
     if( mysteryWordArray.includes(letterGuessed) ){                       // If the letter is correct, get the index and append the lettersFound array
 
       for(let i=0; i <= mysteryWordArray.length; i++){                     // Loop thru the array in case the letter appears more than once
         letterIndex = mysteryWordArray.indexOf(letterGuessed, i);
-        console.log( "Letter Index is:" +letterIndex);
+        //console.log( "Letter Index is:" +letterIndex);
         
         if(letterIndex !== -1){                                            // If the letter is found, add it to the Letters found array
           lettersFound[letterIndex] = letterGuessed;
-          console.log("LettersFound array contains: " + lettersFound);
+          //console.log(lettersFound);
         }
       }
+      console.log("Incorrect Letters: " + xLetters);
+      displayGallows(xLetters.length);
+      console.log("Letters Found: " +lettersFound);                  //  reformat so it replaces the commas with spaces?
 
     } else {  // Letter is not in our mystery word
       xLetters.push(letterGuessed);                                 // Add the letter to the incorrect word array
       console.log("Incorrect Letters: " + xLetters);
-      console.log(displayGallows(xLetters.length));
-    }
+      displayGallows(xLetters.length);
+      console.log("Letters Found: " +lettersFound);
 
+    }
+    //console.log("is the length >= 6? " + xLetters.length >= WRONG_GUESSES);
     // Check to see if the game has been solved or the man has been hanged
-    if (xLetters.length >= WRONG_GUESSES) {
+    if ( xLetters.length >= WRONG_GUESSES) {
       hanged = true;
       console.log("Hanged!");
     } else {
-      console.log("Letters found array: " +lettersFound);
-      console.log("MysteryWord array: " +mysteryWordArray);
-      console.log("Are they equal?" +compareArrays( mysteryWordArray, lettersFound ));
+      //console.log("Letters found array: " +lettersFound);
+      //console.log("MysteryWord array: " +mysteryWordArray);
+      //console.log("Are they equal?" +compareArrays( mysteryWordArray, lettersFound ));
 
       if( compareArrays( mysteryWordArray, lettersFound )) {
         solved = true;
-        console.log("Solved is: " + solved);
+        console.log("Congratulations!  You solved that in " + numGuesses + " guesses");
       }
     }
-  }
+  }  
 
+}  // end while loop
+
+let play = prompt.question("Would you like to play again? (y/n)");
+if (play=="y") {
+  startGame();
+} else {
+  console.log("See ya next time!");
 }
- 
