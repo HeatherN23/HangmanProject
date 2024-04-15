@@ -35,24 +35,18 @@ const displayWelcome = () => {
 /**** This function recieves a number represented the number of wrong gueeses and constructs a gallows accordingly  ****/
 const displayGallows = (num) => {
  console.log("________\n|\t!\n|" + HANGMAN_ARRAY[num]); 
+ console.log("Leaving the function");
 };
 
 /**** This function compares two arrays, element by element.    ****/
-const compareArrays = (a, b) => { return a.length === b.length && a.every((element, index) => element === b[index]);
-  
- /* if( mysteryWord.length !== lettersFound.length) {
-    return false;
-  } else {  
-    mysteryWord.every((element, index) => element === lettersFound[index]);
-  }
-  */
-    
+const compareArrays = (a, b) => { return a.length === b.length && a.every((element, index) => element === b[index]);    
 };
+
 
 /* * -> Initialize variables  ( hangMan T/F, maxGuesses=6, numGuesses, mysteryWord array?, lettersFound array?, playAgain) */
 let hanged=false;                                      // true or false
 let solved;
-const WRONG_GUESSES = 5;
+const WRONG_GUESSES = 6;
 const HANGMAN_ARRAY = [
   '\n| \n| \n| \n|________\n',                         //0  Empty Gallows
   '\tO\n| \n| \n| \n|________\n',                      //1  Head
@@ -75,7 +69,10 @@ let letterIndex;
 startGame(0);
 
 // While the man is not hung and the word is not solved and guesses != MaxGuesses
-while( !hanged && !solved && xLetters.length != WRONG_GUESSES ){
+while( !hanged && !solved && xLetters.length !== WRONG_GUESSES ){
+  console.log("value of xletters is: " +xLetters);
+  console.log("xletters.length="+xLetters.length);
+
   /* Prompt the user to select a letter & store the guess in a variable */ 
   let letterGuessed = prompt.question("Please guess a letter:  ");
   letterGuessed = letterGuessed.toLowerCase();
@@ -88,6 +85,8 @@ while( !hanged && !solved && xLetters.length != WRONG_GUESSES ){
     console.log("You've already guessed that letter.  Try again!");
     numGuesses--;       
   } else {
+    allLetters.push(letterGuessed);
+    
     if( mysteryWordArray.includes(letterGuessed) ){                       // If the letter is correct, get the index and append the lettersFound array
 
       for(let i=0; i <= mysteryWordArray.length; i++){                     // Loop thru the array in case the letter appears more than once
@@ -98,15 +97,16 @@ while( !hanged && !solved && xLetters.length != WRONG_GUESSES ){
           lettersFound[letterIndex] = letterGuessed;
           console.log("LettersFound array contains: " + lettersFound);
         }
-      }    
+      }
+
     } else {  // Letter is not in our mystery word
       xLetters.push(letterGuessed);                                 // Add the letter to the incorrect word array
       console.log("Incorrect Letters: " + xLetters);
-      console.log(HANGMAN_ARRAY[xLetters.length-1]);
+      console.log(displayGallows(xLetters.length));
     }
 
     // Check to see if the game has been solved or the man has been hanged
-    if (xLetters.length > WRONG_GUESSES) {
+    if (xLetters.length >= WRONG_GUESSES) {
       hanged = true;
       console.log("Hanged!");
     } else {
