@@ -17,27 +17,27 @@ const startGame = () => {
 
   /* -> Break the word down to letters and store in an array*/
   mysteryWordArray = mysteryWord.split("");
-  //console.log("Mystery word array is " +mysteryWordArray);
-
+  
   /* -> Create an array of underscores to hold the guesses*/
   lettersFound = Array.from('_' .repeat(mysteryWord.length));
-  //console.log("Letters Found Array = " +lettersFound);
-
+  
   console.log("\n\n\n");
   displayGallows(0);
 };
 
 const displayWelcome = () => {
-  let msg = "\n\nWELCOME TO HANGMAN!  \n\nThe object of this game is to guess the letters of a mystery word.";
-  msg += "\nIf you guess wrong, your man will have an appendage added. ";
-  msg += "\nWhen the full person is on the gallows, the game is over.  \nYou only get 6 wrong answers before your man is hanged, and then the game is over.";
-  msg += "\nPress CTRL + C to stop the game."
+  let msg = "\n\nWELCOME TO HANGMAN!  \n\n********************************************************************************";
+  msg += "\n\nThe object of the game is to guess the letters of a mystery word before the man is hanged.";
+  msg += "\nWhen the letter doesn't appear in the mystery word, I will add an appendage to your man.";
+  msg += "\nYou can only guess 6 wrong answers before your man is hanged, and the game is over.";
+  msg += "\n\nPress CTRL + C to stop the game.";
+  msg += "\n\n********************************************************************************";
   console.log(msg);
 };
 
 /**** This function recieves a number represented the number of wrong gueeses and constructs a gallows accordingly  ****/
 const displayGallows = (num) => {
- console.log("________\n|\t!\n|" + HANGMAN_ARRAY[num]);  
+  console.log("________\n|\t!\n|" + HANGMAN_ARRAY[num]);  
 };
 
 /**** This function compares two arrays, element by element.    ****/
@@ -45,7 +45,7 @@ const compareArrays = (a, b) => { return a.length === b.length && a.every((eleme
 };
 
 
-/* * -> Initialize variables  ( hangMan T/F, maxGuesses=6, numGuesses, mysteryWord array?, lettersFound array?, playAgain) */
+/* Initialize variables  */
 let hanged=false;                                      // true or false
 let solved=false;
 const WRONG_GUESSES = 6;
@@ -59,71 +59,62 @@ const HANGMAN_ARRAY = [
   '\tO\n|      /|\\\n|      / \\\n|________\n'         //6  Head, Body, and Both Arms & Legs
 ]
 
-let numGuesses;         // number of letters the user has guessed
+let numGuesses;             // number of letters the user has guessed
 let mysteryWord;            // randomly selected word from the word bank
 let mysteryWordArray = [];  // the mystery word broken down into letters.
 let lettersFound = [];      // letters that have been found, initially each element will be _
-let xLetters;          // an array of incorrect letters to display to user
-let allLetters;        // an array of all the letters guessed
+let xLetters;               // an array of incorrect letters to display to user
+let allLetters;             // an array of all the letters guessed
 let letterIndex;
 
 displayWelcome();
-let play = prompt.question("Would you like to play Hangman? (y/n)");
+
+let play = prompt.question("\nWould you like to play Hangman? (y/n)");
 while( play == 'y'){
   startGame(0);
 
   // While the man is not hung and the word is not solved and guesses != MaxGuesses
   while( !hanged && !solved && xLetters.length !== WRONG_GUESSES ){
-    //console.log("value of xletters is: " +xLetters);
-    //console.log("xletters.length="+xLetters.length);
-
+    
     /* Prompt the user to select a letter & store the guess in a variable */ 
     let letterGuessed = prompt.question("\n\nPlease guess a letter:  ");
     letterGuessed = letterGuessed.toLowerCase();
-    //console.log("Letter Guessed is: " + letterGuessed);
     numGuesses++;
-    //console.log("Number of Guesses is: " + numGuesses);
-
-    
+        
     if( allLetters.includes(letterGuessed)) {                               // Check to see if the letter has been guessed.
       console.log("You've already guessed that letter.  Try again!");
       numGuesses--;       
     } else {
-      allLetters.push(letterGuessed);
-      //console.log("All letters guessed: " +allLetters);    
 
+      allLetters.push(letterGuessed);
+      
       if( mysteryWordArray.includes(letterGuessed) ){                       // If the letter is correct, get the index and append the lettersFound array
 
         for(let i=0; i <= mysteryWordArray.length; i++){                     // Loop thru the array in case the letter appears more than once
           letterIndex = mysteryWordArray.indexOf(letterGuessed, i);
-          //console.log( "Letter Index is:" +letterIndex);
-          
+                    
           if(letterIndex !== -1){                                            // If the letter is found, add it to the Letters found array
-            lettersFound[letterIndex] = letterGuessed;
-            //console.log(lettersFound);
+            lettersFound[letterIndex] = letterGuessed;            
           }
         }
         console.log("Incorrect Letters: " + xLetters);
         displayGallows(xLetters.length);
-        console.log("Letters Found: " +lettersFound);                  //  reformat so it replaces the commas with spaces?
+        console.log("Letters Found: " +lettersFound);                       //  reformat so it replaces the commas with spaces?
 
       } else {  // Letter is not in our mystery word
-        xLetters.push(letterGuessed);                                 // Add the letter to the incorrect word array
+        xLetters.push(letterGuessed);                                       // Add the letter to the incorrect word array
         console.log("Incorrect Letters: " + xLetters);
         displayGallows(xLetters.length);
         console.log("Letters Found: " +lettersFound);
 
       }
-      //console.log("is the length >= 6? " + xLetters.length >= WRONG_GUESSES);
+      
       // Check to see if the game has been solved or the man has been hanged
       if ( xLetters.length >= WRONG_GUESSES) {
         hanged = true;
-        console.log("Hanged!");
+        console.log("Womp Womp! You've been hanged!");
       } else {
-        //console.log("Letters found array: " +lettersFound);
-        //console.log("MysteryWord array: " +mysteryWordArray);
-        //console.log("Are they equal?" +compareArrays( mysteryWordArray, lettersFound ));
-
+        
         if( compareArrays( mysteryWordArray, lettersFound )) {
           solved = true;
           console.log("Congratulations!  You solved that in " + numGuesses + " guesses");
@@ -133,15 +124,8 @@ while( play == 'y'){
 
   }  // end while loop
 
-play = prompt.question("Would you like to play again? (y/n) ");
+play = prompt.question("\nWould you like to play again? (y/n) ");
 }
-
+console.clear();
 console.log("See ya next time!");
 
-/*
-if (play=="y") {
-  startGame();
-} else {
-  console.log("See ya next time!");
-}
-*/
