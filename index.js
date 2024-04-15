@@ -13,8 +13,7 @@ const startGame = () => {
   xLetters=[];
   lettersFound=[];
   mysteryWord = wordBank[Math.floor(Math.random() * wordBank.length)];
-  console.log("Mystery word is "+ mysteryWord);
-
+  
   /* -> Break the word down to letters and store in an array*/
   mysteryWordArray = mysteryWord.split("");
   
